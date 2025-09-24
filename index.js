@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 3000
 
@@ -32,6 +32,8 @@ async function run() {
 
 
     app.get('/recipes', async(req, res)=>{
+      // const cursor = recipesCollection.find();
+      // const result = await cursor.toArray();
       const result = await recipesCollection.find().toArray();
       res.send(result);
     })
@@ -42,6 +44,30 @@ async function run() {
       const result = await recipesCollection.insertOne(recipe);
       res.send(result);
     })
+
+
+    app.get('/recipes/:id', async(req, res)=>{
+        const id = req.params.id;
+        const query = {_id : new ObjectId(id)};
+        const result = await recipesCollection.findOne(query)
+        res.send(result);
+    })
+
+
+    app.patch('/recipes/:id', async(req, res)=>{
+      const id = req.params.id;
+      const  {like} = req.body;
+      const filter = {_id : new ObjectId(id)};
+      const updatedDoc = {
+        $set: {
+          like: like
+        }
+      }
+      const result = await recipesCollection.updateOne(filter, updatedDoc)
+      res.send(result);
+
+    })
+
 
 
     // Send a ping to confirm a successful connection
