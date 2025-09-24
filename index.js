@@ -31,9 +31,14 @@ async function run() {
 
 
 
-    app.get('/recipes', async(req, res)=>{
+    app.get('/recipes/home', async(req, res)=>{
       // const cursor = recipesCollection.find();
       // const result = await cursor.toArray();
+      const result = await recipesCollection.find().limit(6).toArray();
+      res.send(result);
+    })
+
+    app.get('/recipes', async(req, res)=>{
       const result = await recipesCollection.find().toArray();
       res.send(result);
     })
