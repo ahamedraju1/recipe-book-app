@@ -66,6 +66,28 @@ async function run() {
     })
 
 
+    app.put('/recipes/:id', async(req, res) => {
+      const id = req.params.id;
+      const filter = { _id : new ObjectId(id)}
+      const updatedData = req.body;
+      console.log(updatedData);
+
+      const updatedDoc = {
+        $set : {
+          title : updatedData.title,
+          category: updatedData.category,
+          like: updatedData.like,
+          photo: updatedData.photo
+        }
+      };
+      const result = await recipesCollection.updateOne(filter, updatedDoc);
+      console.log(result);
+      
+      // const updatedRecipe = await recipesCollection.findOne(filter);
+      // res.send(updatedRecipe);
+
+    })
+
     app.patch('/recipes/:id', async(req, res)=>{
       const id = req.params.id;
       const  {like} = req.body;
