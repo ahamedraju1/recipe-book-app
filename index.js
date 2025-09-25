@@ -103,6 +103,18 @@ async function run() {
     })
 
 
+    app.delete('/recipes/:id', async(req, res)=>{
+      const id = req.params.id;
+      const query = {_id : new ObjectId(id)}
+      const result = await recipesCollection.deleteOne(query)
+      res.send(result);
+
+      if(result.deletedCount === 0){
+        return res.status(404).send({message: "Recipe not found"});
+      }
+      res.send({ message: "Recipe deleted Successfully", id});
+    })
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -113,7 +125,6 @@ async function run() {
   }
 }
 run().catch(console.dir);
-
 
 
 
