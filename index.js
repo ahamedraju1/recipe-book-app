@@ -50,6 +50,13 @@ async function run() {
       res.send(result);
     })
 
+    app.get('/myRecipes', async(req, res)=>{
+      const userId = req.query.userId;
+      const recipes = await recipesCollection.find({userId}).toArray();
+      res.send(recipes);
+    })
+
+    // db.recipes.find({}, { title: 1, userId: 1 })
 
     app.get('/recipes/:id', async(req, res)=>{
         const id = req.params.id;
